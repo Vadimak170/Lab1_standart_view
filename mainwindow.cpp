@@ -48,19 +48,28 @@ void selectionSort_sruct(city *arr, int n,int key)
 
     }
 }
-     void GnomeSort_struct(city *A, int N,int key) {
-    int i = 0;
-    while(i < N) { if(key==1){
-        if(i == 0 || A[i - 1].humans <= A[i].humans) ++i; }
-        if(key==2){
-                if(i == 0 || A[i - 1].year <= A[i].year) ++i; }
-        else {
-            city Temp = A[i];
-            A[i] = A[i - 1];
-            A[i - 1] = Temp;
-            --i;
-        }
-    }
+void GnomeSort_struct(city *A, int N,int key) {
+   int i = 0;
+   if(key==1){
+   while(i < N) {
+       if(i == 0 || A[i - 1].humans <= A[i].humans) ++i;
+       else {
+           city Temp = A[i];
+           A[i] = A[i - 1];
+           A[i - 1] = Temp;
+           --i;
+       }
+   }}
+   if(key==2){
+   while(i < N) {
+       if(i == 0 || A[i - 1].year <= A[i].year) ++i;
+       else {
+           city Temp = A[i];
+           A[i] = A[i - 1];
+           A[i - 1] = Temp;
+           --i;
+       }
+   }}
 }
 void insertion_sort_struct (city *arr, int length,int key){
         int j;
@@ -213,10 +222,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->comboBox_2->setVisible(0);
+    ui->label_2->setVisible(0);
+    ui->groupBox_3->setVisible(0);
     ui->comboBox->addItem("Сортировка сгенерированного массива", QVariant(1));
     ui->comboBox->addItem("Сортировка по ключу из файла", QVariant(2));
     ui->comboBox_2->addItem("Количество населения", QVariant(1));
     ui->comboBox_2->addItem("Год основания", QVariant(2));
+
 }
 
 MainWindow::~MainWindow()
@@ -225,13 +238,18 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::on_pushButton_clicked()
-{   QTime start = QTime::currentTime();
+{   static int opened;
+    int value = ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
+    int key = ui->comboBox_2->itemData(ui->comboBox_2->currentIndex()).toInt();
+    if (value==2){
     ui->statusBar->showMessage("Идет считывание");
     std::ifstream in("in.txt");
     if (!in) {QMessageBox::warning(this,"Ошибка!","Не удалось открыть файл"); QApplication::quit(); }
     std::string test, temp;
     int i=0,j=0,k=0;
     city a[600];
+    if(opened>0) { for(int z(0);z<500;z++) a[z].name.clear();}
+        opened++;
     while(std::getline(in,test))
     {
         while(test[i]!=',')
@@ -251,10 +269,38 @@ void MainWindow::on_pushButton_clicked()
         temp.clear();
         j++;
         i=0;
-    }
- //   QString s=QString::number(t.elapsed());
-   // ui->statusBar->showMessage(s);
-   //  qDebug() << "прошло " << start.elapsed() << " милисекунд";
+    }  ui->statusBar->showMessage("Файл прочитан"); in.close();
+    QTime start = QTime::currentTime();
+    if(ui->radioInsert->isChecked()) {insertion_sort_struct(a,j,key);} else
+        if(ui->radioSelection->isChecked()) {selectionSort_sruct(a,j,key);} else
+            if(ui->radioGnome->isChecked()) {GnomeSort_struct(a,j,key);} else
+                if(ui->radioBinary->isChecked()) {BinaryInsertionSort_struct(a,j,key);}
     QString s=QString::number(start.elapsed());
-     ui->timeSelection->setText(s);
+     ui->timeStruct->setText(s);
+     std::ofstream out("out.txt");
+     for(int k(0);k<j;k++)
+         out<<a[k].name<<" "<<a[k].humans<<" "<<a[k].year<<std::endl;
+     out.close();
+    }
+
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    int value = ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
+    if(value==2) {
+        ui->comboBox_2->setVisible(1);
+        ui->label_2->setVisible(1);
+        ui->groupBox->setVisible(0);
+        ui->groupBox_2->setVisible(0);
+        ui->groupBox_3->setVisible(1);
+        ui->groupBox_3->raise();
+    } else{
+        ui->comboBox_2->setVisible(0);
+        ui->label_2->setVisible(0);
+        ui->groupBox->setVisible(1);
+        ui->groupBox_2->setVisible(1);
+        ui->groupBox_3->setVisible(0);
+        ui->groupBox_2->raise();
+    }
 }
