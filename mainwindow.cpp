@@ -270,17 +270,55 @@ void MainWindow::on_pushButton_clicked()
         j++;
         i=0;
     }  ui->statusBar->showMessage("Файл прочитан"); in.close();
+    bool err;
     QTime start = QTime::currentTime();
     if(ui->radioInsert->isChecked()) {insertion_sort_struct(a,j,key);} else
         if(ui->radioSelection->isChecked()) {selectionSort_sruct(a,j,key);} else
             if(ui->radioGnome->isChecked()) {GnomeSort_struct(a,j,key);} else
                 if(ui->radioBinary->isChecked()) {BinaryInsertionSort_struct(a,j,key);}
-    QString s=QString::number(start.elapsed());
+        else { QMessageBox::warning(this,"Ошибка","Не выбран вид сортировки");  err=1;}
+   if(!err) {QString s=QString::number(start.elapsed());
      ui->timeStruct->setText(s);
      std::ofstream out("out.txt");
      for(int k(0);k<j;k++)
          out<<a[k].name<<" "<<a[k].humans<<" "<<a[k].year<<std::endl;
      out.close();
+     QMessageBox::information(this,"Успешно!","Результы выведены в файл");}
+
+    }else if (value==1)
+    { QTime start;
+        QString s;
+        int n;
+            n=ui->size->text().toInt();
+            int *arr = new int[n];
+                   int *arr2 = new int[n];
+                    int *arr3 = new int[n];
+                   int *arr4 = new int[n];
+                   ui->statusBar->showMessage("Идет генерация данных");
+                generator(arr,arr2,arr3,arr4,n);
+                 ui->statusBar->showMessage("Идет сортировка");
+                if(ui->checkinsert->isChecked()){ start = QTime::currentTime();
+                insertionSort(arr,n);
+                 s=QString::number(start.elapsed());
+                     ui->timeInsert->setText(s);}
+                    if (ui->checkGnome->isChecked()){ start = QTime::currentTime();
+                     GnomeSort(arr2,n);
+                      s=QString::number(start.elapsed());
+                          ui->timeGnome->setText(s);}
+                        if(ui->checkBoxBinary->isChecked()){ start = QTime::currentTime();
+                BinaryInsertionSort(arr3,n);
+                s=QString::number(start.elapsed());
+                    ui->timeBinary->setText(s);}
+                    if (ui->checkSelection->isChecked()){ start = QTime::currentTime();
+                selectionSort(arr4,n);
+                s=QString::number(start.elapsed());
+                    ui->timeSelection->setText(s);}
+                ui->statusBar->showMessage("Сортировка окончена");
+                delete [] arr;
+                 delete [] arr2;
+                 delete [] arr3;
+                 delete [] arr4;
+
     }
 
 }
@@ -288,8 +326,10 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
     int value = ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
-    if(value==2) {
+    if(value==2) { ui->mas->setVisible(0);
+        ui->size->setVisible(0);
         ui->comboBox_2->setVisible(1);
+        ui->comboBox_2->raise();
         ui->label_2->setVisible(1);
         ui->groupBox->setVisible(0);
         ui->groupBox_2->setVisible(0);
@@ -302,5 +342,8 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
         ui->groupBox_2->setVisible(1);
         ui->groupBox_3->setVisible(0);
         ui->groupBox_2->raise();
+        ui->mas->setVisible(1);
+                ui->size->setVisible(1);
+                ui->size->raise();
     }
 }
