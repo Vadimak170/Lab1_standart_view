@@ -23,7 +23,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Sort them all!</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>img/if_Cat_132185.png</normaloff>img/if_Cat_132185.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="pushButton">

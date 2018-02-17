@@ -229,7 +229,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBox->addItem("Сортировка по ключу из файла", QVariant(2));
     ui->comboBox_2->addItem("Количество населения", QVariant(1));
     ui->comboBox_2->addItem("Год основания", QVariant(2));
-
+    ui->label_3->setVisible(0);
+    ui->label_7->setVisible(0);
+ui->label_4->setVisible(0);
+ui->label_5->setVisible(0);
+ui->label_6->setVisible(0);
+ui->label_8->setVisible(0);
+ui->label_9->setVisible(0);
+ui->label_10->setVisible(0);
+ui->checkSelection->setChecked(1);
+ui->checkGnome->setChecked(1);
+ui->checkinsert->setChecked(1);
+ui->checkBoxBinary->setChecked(1);
 }
 
 MainWindow::~MainWindow()
@@ -346,4 +357,58 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
                 ui->size->setVisible(1);
                 ui->size->raise();
     }
+}
+
+void MainWindow::on_checkinsert_stateChanged(int arg1)
+{ static int open=1;
+    if(open%2==1){
+        ui->timeInsert->setVisible(1);
+    ui->label_3->setVisible(1);
+    ui->label_7->setVisible(1);} else {
+        ui->label_3->setVisible(0);
+        ui->label_7->setVisible(0);
+         ui->timeInsert->setVisible(0);
+    }
+    open++;
+}
+
+void MainWindow::on_checkGnome_stateChanged(int arg1)
+{
+    static int open2=1;
+        if(open2%2==1){
+             ui->timeGnome->setVisible(1);
+        ui->label_4->setVisible(1);
+        ui->label_8->setVisible(1);} else {
+            ui->label_4->setVisible(0);
+            ui->label_8->setVisible(0);
+             ui->timeGnome->setVisible(0);
+        }
+        open2++;
+}
+
+void MainWindow::on_checkBoxBinary_stateChanged(int arg1)
+{
+    static int open3=1;
+        if(open3%2==1){ ui->timeBinary->setVisible(1);
+        ui->label_5->setVisible(1);
+        ui->label_9->setVisible(1);} else {
+            ui->label_5->setVisible(0);
+            ui->label_9->setVisible(0);
+             ui->timeBinary->setVisible(0);
+        }
+        open3++;
+}
+
+void MainWindow::on_checkSelection_stateChanged(int arg1)
+{
+    static int open4=1;
+        if(open4%2==1){
+             ui->timeSelection->setVisible(1);
+        ui->label_6->setVisible(1);
+        ui->label_10->setVisible(1);} else {
+             ui->timeSelection->setVisible(0);
+            ui->label_6->setVisible(0);
+            ui->label_10->setVisible(0);
+        }
+        open4++;
 }
