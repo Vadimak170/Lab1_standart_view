@@ -23,20 +23,22 @@ void generator(int* arr, int* arr2,int* arr3,int* arr4, int n)
     arr4[i]=arr[i];}
 
 }
-void selectionSort_sruct(city *arr, int n)
+void selectionSort_sruct(city *arr, int n,int key)
 {
     int i, j, min_idx;
-
 
     for (i = 0; i < n-1; i++)
     {
 
         min_idx = i;
         for (j = i+1; j < n; j++)
+            if(key==1) {
           if (arr[j].humans < arr[min_idx].humans)
-            min_idx = j;
+            min_idx = j;}
 
-
+        if(key==2) {
+      if (arr[j].year < arr[min_idx].year)
+        min_idx = j;}
 
 
             city temp;
@@ -46,10 +48,12 @@ void selectionSort_sruct(city *arr, int n)
 
     }
 }
-     void GnomeSort_struct(city *A, int N) {
+     void GnomeSort_struct(city *A, int N,int key) {
     int i = 0;
-    while(i < N) {
-        if(i == 0 || A[i - 1].humans <= A[i].humans) ++i;
+    while(i < N) { if(key==1){
+        if(i == 0 || A[i - 1].humans <= A[i].humans) ++i; }
+        if(key==2){
+                if(i == 0 || A[i - 1].year <= A[i].year) ++i; }
         else {
             city Temp = A[i];
             A[i] = A[i - 1];
@@ -58,18 +62,25 @@ void selectionSort_sruct(city *arr, int n)
         }
     }
 }
-void insertion_sort_struct (city *arr, int length){
+void insertion_sort_struct (city *arr, int length,int key){
         int j;
         city temp;
     for (int i = 0; i < length; i++){
         j = i;
-
+        if(key==1){
         while (j > 0 && arr[j].humans < arr[j-1].humans){
               temp = arr[j];
               arr[j] = arr[j-1];
               arr[j-1] = temp;
               j--;
-              }
+        }}
+        if(key==2){
+        while (j > 0 && arr[j].year < arr[j-1].year){
+              temp = arr[j];
+              arr[j] = arr[j-1];
+              arr[j-1] = temp;
+              j--;
+        }}
         }
 }
 
@@ -89,13 +100,15 @@ int BinarySearch_struct (city *a, int low, int high, int key)
 
     return mid;
 }
-void BinaryInsertionSort_struct (city *a, int n)
+void BinaryInsertionSort_struct (city *a, int n, int key)
 {
     int ins, i, j;
     city tmp;
 
-    for (i = 1; i < n; i++) {
-        ins = BinarySearch_struct(a, 0, i, a[i].humans);
+    for (i = 1; i < n; i++) { if(key==1){
+        ins = BinarySearch_struct(a, 0, i, a[i].humans);}
+        if(key==2){
+                ins = BinarySearch_struct(a, 0, i, a[i].year);}
         tmp = a[i];
         for (j = i - 1; j >= ins; j--)
             a[j + 1] = a[j];
@@ -116,12 +129,9 @@ void GnomeSort(int *A, int N) {
 }
 
 
-
-
-
-void selectionSort(int arr[], int n)
+void selectionSort(int *arr, int n)
 {
-    int i, j, min_idx;
+    int i, j, min_idx,temp;
 
 
     for (i = 0; i < n-1; i++)
@@ -133,7 +143,10 @@ void selectionSort(int arr[], int n)
             min_idx = j;
 
 
-        swap(&arr[min_idx], &arr[i]);
+
+        temp=arr[min_idx];
+        arr[min_idx]=arr[i];
+        arr[i]=temp;
     }
 }
 
